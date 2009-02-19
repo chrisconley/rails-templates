@@ -42,7 +42,7 @@ rake('gems:install', :sudo => true)
 in_root do
   run "haml --rails ."
 end
-generate("nifty-layout application --haml")
+generate("nifty_layout application --haml")
 rake('db:sessions:create')
 generate("authenticated", "user session --rspec")
 generate("roles", "Role User")
