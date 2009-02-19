@@ -21,6 +21,7 @@ gem 'ruby-openid', :lib => 'openid'
 gem 'sqlite3-ruby', :lib => 'sqlite3'
 gem 'haml'
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+#gem 'nifty-generators'
 
 sentinel = 'Rails::Initializer.run do |config|'
 session_code = "config.action_controller.session = { :key => '_#{(1..6).map { |x| (65 + rand(26)).chr }.join}_session', :secret => '#{(1..40).map { |x| (65 + rand(26)).chr }.join}' }"
@@ -39,15 +40,14 @@ ActionController::Base.session_store = :active_record_store
 rake('gems:install', :sudo => true)
 
 in_root do
-  run "haml -—rails ."
+  run "haml --rails ."
 end
-run "mkdir public/stylesheets/sass"
-run "touch public/stylesheets/sass/application.sass"
-  rake('db:sessions:create')
-  generate("authenticated", "user session")
-  generate("roles", "Role User")
-  rake('open_id_authentication:db:create')
-  rake('db:migrate')
+generate("nifty-layout application --haml")
+rake('db:sessions:create')
+generate("authenticated", "user session --rspec")
+generate("roles", "Role User")
+rake('open_id_authentication:db:create')
+rake('db:migrate')
 
 
  
